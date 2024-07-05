@@ -22,7 +22,19 @@ jobs:
       - name: Run pre-commit
         run: pre-commit run --all-files
 
-  create-pubsub-topic:
+  create-pubsub-topic_new:
+    runs-on: ubuntu-latest
+    steps:
+    
+      - uses: actions/checkout@v3
+  
+      - name: Setup GCP Service Account
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: "cicdtest-421422"
+          service_account_key: ${{ secrets.GCP_ACCOUNT_KEY }}
+  
+  create-pubsub-topic_old:
     runs-on: ubuntu-latest
     container:
       image: google/cloud-sdk
