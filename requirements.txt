@@ -1,0 +1,6 @@
+google-auth
+google-cloud-aiplatform
+python-dotenv==0.19.1
+requests==2.26.0
+slack_sdk==3.11.2
+vertexai==1.49.0
