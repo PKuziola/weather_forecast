@@ -62,6 +62,7 @@ jobs:
             echo "Topic 'weather-topic' created."
           else
             echo "Topic 'weather-topic' already exists."
+          fi
         shell: bash
         env:
           CLOUDSDK_METRICS_ENVIRONMENT: github-actions-setup-gcloud
