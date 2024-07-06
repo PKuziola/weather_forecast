@@ -40,6 +40,10 @@ jobs:
             gcloud pubsub topics create weather-topic
           else
             echo "Topic 'weather-topic' already exists."
+        shell: bash
+        env:
+          CLOUDSDK_METRICS_ENVIRONMENT: github-actions-setup-gcloud
+          CLOUDSDK_METRICS_ENVIRONMENT_VERSION: 2.1.0
       
   
   create-pubsub-topic_old:
