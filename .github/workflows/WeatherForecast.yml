@@ -77,13 +77,8 @@ jobs:
         uses: google-github-actions/setup-gcloud@main
         with:
           project_id: "cicdtest-421422"
-          service_account_key: ${{ secrets.GCP_ACCOUNT_KEY }}
-          
-      - name: Authenticate with Google Cloud
-        run: |
-          echo "${{ secrets.GCP_ACCOUNT_KEY }}" > /tmp/key.json
-          gcloud auth activate-service-account --key-file=/tmp/key.json
-          
+          service_account_key: ${{ secrets.GCP_ACCOUNT_KEY }}       
+        
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -105,8 +100,7 @@ jobs:
           event_trigger_type: topic weather-topic
           memory: 512MB
           environment_variables: "API_KEY=${{ secrets.API_KEY }},SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}"
-  
-  
+    
   create-scheduler-job:
     runs-on: ubuntu-latest
     container:
