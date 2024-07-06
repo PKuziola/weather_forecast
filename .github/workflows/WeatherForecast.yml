@@ -46,29 +46,37 @@ jobs:
           CLOUDSDK_METRICS_ENVIRONMENT: github-actions-setup-gcloud
           CLOUDSDK_METRICS_ENVIRONMENT_VERSION: 2.1.0
       
-  
-  create-pubsub-topic_old:
+  deploy-gloud-functions_new:
     runs-on: ubuntu-latest
-    container:
-      image: google/cloud-sdk
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Set up Google Cloud SDK
-        run: echo ${{ secrets.GCP_ACCOUNT_KEY}} > gcloud-service-key.json
-      - name: Authenticate to Google Cloud
-        run: gcloud auth activate-service-account --key-file gcloud-service-key.json
-      - name: Remove service key
-        run: rm gcloud-service-key.json
-      - name: Set Google Cloud project
-        run: gcloud config set project cicdtest-421422
-      - name: Create Pub/Sub topic
-        run: |
-          if ! gcloud pubsub topics list --filter="name:weather-topic" | grep weather-topic; then
-            gcloud pubsub topics create weather-topic
-          fi
+    
+      - uses: actions/checkout@v3
+  
+      - name: Setup GCP Service Account
+        uses: google-github-actions/setup-gcloud@main
+        with:
+          project_id: "cicdtest-421422"
+          service_account_key: ${{ secrets.GCP_ACCOUNT_KEY }}
 
-  deploy-cloud-function:
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      
+      - name: deploy cloud function
+        id: deploy
+        uses: google-github-actions/deploy-cloud-functions@main
+        with:
+          name: generate_weather_summary
+          runtime: python310
+          project_id: "cicdtest-421422"
+          entry_point: generate_weather_summary
+          region: europe-west1
+          source: .
+          trigger: topic weather-topic
+          memory: 512MB
+          set-env-vars: "API_KEY=${{ secrets.API_KEY }},SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}"
+  
+  
+  deploy-cloud-function_old:
     runs-on: ubuntu-latest
     container:
       image: google/cloud-sdk
