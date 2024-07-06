@@ -12,11 +12,17 @@ jobs:
       image: python:3.11
     
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Change directory to repository root
+      run: cd $GITHUB_WORKSPACE
+
     - name: Set up Python 3.11
       uses: actions/setup-python@v2
       with:
         python-version: 3.11
+          
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
