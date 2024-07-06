@@ -41,7 +41,7 @@ jobs:
       run: pip install pre-commit
 
     - name: Run pre-commit with debug
-      run: pre-commit run --all-files --debug
+      run: pre-commit run --all-files
 
   create-pubsub-topic_new:
     runs-on: ubuntu-latest
