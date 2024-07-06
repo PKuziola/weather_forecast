@@ -38,6 +38,7 @@ jobs:
         run: |
           if ! gcloud pubsub topics describe weather-topic > /dev/null 2>&1; then
             gcloud pubsub topics create weather-topic
+            echo "Topic 'weather-topic' created."
           else
             echo "Topic 'weather-topic' already exists."
         shell: bash
