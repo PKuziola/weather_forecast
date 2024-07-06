@@ -33,6 +33,14 @@ jobs:
         with:
           project_id: "cicdtest-421422"
           service_account_key: ${{ secrets.GCP_ACCOUNT_KEY }}
+
+      - name: Check and Create Pub/Sub topic
+        run: |
+          if ! gcloud pubsub topics describe weather-topic > /dev/null 2>&1; then
+            gcloud pubsub topics create weather-topic
+          else
+            echo "Topic 'weather-topic' already exists."
+      
   
   create-pubsub-topic_old:
     runs-on: ubuntu-latest
