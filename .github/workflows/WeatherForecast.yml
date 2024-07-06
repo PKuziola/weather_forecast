@@ -57,7 +57,12 @@ jobs:
         with:
           project_id: "cicdtest-421422"
           service_account_key: ${{ secrets.GCP_ACCOUNT_KEY }}
-
+          
+      - name: Authenticate with Google Cloud
+        run: |
+          echo "${{ secrets.GCP_ACCOUNT_KEY }}" > /tmp/key.json
+          gcloud auth activate-service-account --key-file=/tmp/key.json
+          
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -65,10 +70,7 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt
-
-      - name: Authenticate with Google Cloud
-        run: gcloud auth activate-service-account --key-file=${{ secrets.GCP_ACCOUNT_KEY }}
-      
+    
       - name: deploy cloud function
         id: deploy
         uses: google-github-actions/deploy-cloud-functions@main
