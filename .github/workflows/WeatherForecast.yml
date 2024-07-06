@@ -70,40 +70,12 @@ jobs:
           project_id: "cicdtest-421422"
           entry_point: generate_weather_summary
           region: europe-west1
-          source: .
-          trigger: topic weather-topic
+          source_dir: .
+          event_trigger_type: topic weather-topic
           memory: 512MB
           set-env-vars: "API_KEY=${{ secrets.API_KEY }},SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}"
   
   
-  deploy-cloud-function_old:
-    runs-on: ubuntu-latest
-    container:
-      image: google/cloud-sdk
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Set up Google Cloud SDK
-        run: echo ${{ secrets.GCP_ACCOUNT_KEY }} > gcloud-service-key.json
-      - name: Authenticate to Google Cloud
-        run: gcloud auth activate-service-account --key-file gcloud-service-key.json
-      - name: Remove service key
-        run: rm gcloud-service-key.json
-      - name: Set Google Cloud project
-        run: gcloud config set project cicdtest-421422
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Deploy Cloud Function
-        run: |
-          gcloud functions deploy generate_weather_summary \
-            --runtime=python310 \
-            --entry-point=generate_weather_summary \
-            --region=europe-west1 \
-            --source=. \
-            --trigger-topic weather-topic \
-            --memory=512MB \
-            --set-env-vars "API_KEY=${{ secrets.API_KEY }},SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}"
-
   create-scheduler-job:
     runs-on: ubuntu-latest
     container:
