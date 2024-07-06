@@ -73,7 +73,7 @@ jobs:
           source_dir: .
           event_trigger_type: topic weather-topic
           memory: 512MB
-          set-env-vars: "API_KEY=${{ secrets.API_KEY }},SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}"
+          environment_variables: "API_KEY=${{ secrets.API_KEY }},SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}"
   
   
   create-scheduler-job:
