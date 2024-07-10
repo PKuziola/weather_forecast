@@ -98,6 +98,10 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Enable Cloud Run API
+        run: |
+          gcloud services enable run.googleapis.com
+
       - name: Delete existing Cloud Function
         run: |
           gcloud functions delete generate_weather_summary --region=europe-west1 --quiet || echo "Function does not exist or failed to delete"
