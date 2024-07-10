@@ -105,25 +105,38 @@ jobs:
         run: |
           gcloud services enable run.googleapis.com
 
-      - name: Delete existing Cloud Function
-        run: |
-          gcloud functions delete generate_weather_summary --region=europe-west1 --quiet || echo "Function does not exist or failed to delete"
-        shell: bash
+      #- name: Delete existing Cloud Function
+      #  run: |
+      #    gcloud functions delete generate_weather_summary --region=europe-west1 --quiet || echo "Function does not exist or failed to delete"
+      #  shell: bash
     
-      - name: deploy cloud function
-        id: deploy
-        uses: google-github-actions/deploy-cloud-functions@main
-        with:
-          name: generate_weather_summary
-          runtime: python310
-          project_id: "cicdtest-421422"
-          entry_point: generate_weather_summary
-          region: europe-west1
-          source_dir: .
-          event_trigger_pubsub_topic: weather-topic
-          memory: 512
-          environment: GEN_1
-          environment_variables: "API_KEY=${{ secrets.API_KEY }},SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}"
+      #- name: deploy cloud function
+      #  id: deploy
+      #  uses: google-github-actions/deploy-cloud-functions@main
+      #  with:
+      #    name: generate_weather_summary
+      #    runtime: python310
+      #    project_id: "cicdtest-421422"
+      #    entry_point: generate_weather_summary
+      #    region: europe-west1
+      #    source_dir: .
+      #    event_trigger_pubsub_topic: weather-topic
+      #    memory: 512
+      #    environment: GEN_1
+      #    environment_variables: "API_KEY=${{ secrets.API_KEY }},SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}"
+      
+      - name: Deploy Google Cloud Functions
+        run: |
+          gcloud functions deploy generate_weather_summary \
+            --runtime=python310 \
+            --entry-point=generate_weather_summary \
+            --region=europe-west1 \
+            --source=. \
+            --trigger-topic weather-topic \
+            --memory=512MB \
+        env:
+          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          API_KEY: ${{ secrets.API_KEY }}      
     
   create-scheduler-job:
     runs-on: ubuntu-latest
