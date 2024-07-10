@@ -31,9 +31,6 @@ jobs:
     - name: Check Git version
       run: git --version
       
-    - name: Initialize Git
-      run: git init  # Optional step if needed
-
     - name: Cache pre-commit hooks
       uses: actions/cache@v2
       with:
