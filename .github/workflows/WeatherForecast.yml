@@ -134,9 +134,7 @@ jobs:
             --source=. \
             --trigger-topic weather-topic \
             --memory=512MB \
-        env:
-          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
-          API_KEY: ${{ secrets.API_KEY }}      
+            --set-env-vars "API_KEY=${{ secrets.API_KEY }},SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}" 
     
   create-scheduler-job:
     runs-on: ubuntu-latest
