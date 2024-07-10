@@ -28,7 +28,7 @@ def get_weather_data():
     }
 
     response = requests.get(URL, params=params).json()
-
+    print(response)
     return response
 
 def generate_prompt(response):
