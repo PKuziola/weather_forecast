@@ -15,8 +15,8 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Change directory to repository root
-      run: cd $GITHUB_WORKSPACE
+    - name: Print current directory
+      run: pwd
 
     - name: Set up Python 3.11
       uses: actions/setup-python@v2
@@ -28,6 +28,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Check Git version
+      run: git --version
+      
     - name: Initialize Git
       run: git init  # Optional step if needed
 
