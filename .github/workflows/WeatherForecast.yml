@@ -113,7 +113,7 @@ jobs:
           entry_point: generate_weather_summary
           region: europe-west1
           source_dir: .
-          event_trigger_type: topic weather-topic
+          event_trigger_pubsub_topic: weather-topic
           memory: 512Mi
           environment_variables: "API_KEY=${{ secrets.API_KEY }},SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}"
     
