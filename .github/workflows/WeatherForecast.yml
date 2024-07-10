@@ -165,4 +165,3 @@ jobs:
             --topic=weather-topic \
             --message-body="{}" \
             --location=europe-west1
-
