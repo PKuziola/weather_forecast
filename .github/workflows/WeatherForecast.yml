@@ -118,7 +118,8 @@ jobs:
           region: europe-west1
           source_dir: .
           event_trigger_pubsub_topic: weather-topic
-          memory: 512Mi
+          memory: 512MiB
+          environment: GEN_1
           environment_variables: "API_KEY=${{ secrets.API_KEY }},SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}"
     
   create-scheduler-job:
@@ -126,23 +127,26 @@ jobs:
     container:
       image: google/cloud-sdk
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Set up Google Cloud SDK
-        run: echo ${{ secrets.GCP_ACCOUNT_KEY }} > gcloud-service-key.json
-      - name: Authenticate to Google Cloud
-        run: gcloud auth activate-service-account --key-file gcloud-service-key.json
-      - name: Remove service key
-        run: rm gcloud-service-key.json
-      - name: Set Google Cloud project
-        run: gcloud config set project cicdtest-421422
+
+      - uses: actions/checkout@v3
+  
+      - name: Setup GCP Service Account
+        uses: google-github-actions/setup-gcloud@main
+        with:
+          project_id: "cicdtest-421422"
+          service_account_key: ${{ secrets.GCP_ACCOUNT_KEY }}
+
+      - name: Authenticate GCP Account
+        uses: 'google-github-actions/auth@v2'
+        with:
+           credentials_json: ${{ secrets.GCP_ACCOUNT_KEY }}   
+
       - name: Create Scheduler Job
         run: |
-          if ! gcloud scheduler jobs describe weather-summary-job --location=europe-west1 &> /dev/null; then
-            gcloud scheduler jobs create pubsub weather-summary-job \
-              --schedule="0 20 * * *" \
-              --time-zone="CET" \
-              --topic=weather-topic \
-              --message-body="{}" \
-              --location=europe-west1
-          fi
+          gcloud scheduler jobs update pubsub weather-summary-job \
+            --schedule="0 20 * * *" \
+            --time-zone="CET" \
+            --topic=weather-topic \
+            --message-body="{}" \
+            --location=europe-west1
+
