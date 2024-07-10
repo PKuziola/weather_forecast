@@ -118,7 +118,7 @@ jobs:
           region: europe-west1
           source_dir: .
           event_trigger_pubsub_topic: weather-topic
-          memory: 512MB
+          memory: 512
           environment: GEN_1
           environment_variables: "API_KEY=${{ secrets.API_KEY }},SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}"
     
