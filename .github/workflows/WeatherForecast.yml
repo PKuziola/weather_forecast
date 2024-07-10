@@ -114,7 +114,7 @@ jobs:
           region: europe-west1
           source_dir: .
           event_trigger_type: topic weather-topic
-          memory: 512MB
+          memory: 512Mi
           environment_variables: "API_KEY=${{ secrets.API_KEY }},SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}"
     
   create-scheduler-job:
