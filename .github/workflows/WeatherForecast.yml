@@ -97,6 +97,11 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt
+
+      - name: Delete existing Cloud Function
+        run: |
+          gcloud functions delete generate_weather_summary --region=europe-west1 --quiet || echo "Function does not exist or failed to delete"
+        shell: bash
     
       - name: deploy cloud function
         id: deploy
@@ -110,7 +115,6 @@ jobs:
           source_dir: .
           event_trigger_type: topic weather-topic
           memory: 512MB
-          gen: 1
           environment_variables: "API_KEY=${{ secrets.API_KEY }},SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}"
     
   create-scheduler-job:
