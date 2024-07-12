@@ -9,4 +9,3 @@ repos:
       - id: requirements-txt-fixer
 
 exclude: '(^README\.md$|^license\.txt$)'
-
