@@ -56,7 +56,7 @@ jobs:
       - name: Authenticate GCP Account
         uses: 'google-github-actions/auth@v2'
         with:
-           credentials_json: ${{ secrets.GCP_ACCOUNT_KEY }}   
+           credentials_json: ${{ secrets.GCP_ACCOUNT_KEY }}
 
       - name: Check and Create Pub/Sub topic
         run: |
@@ -100,7 +100,7 @@ jobs:
         run: |
           gcloud services enable run.googleapis.com
 
-    
+
       - name: Deploy Google Cloud Functions
         run: |
           gcloud functions deploy generate_weather_summary \
