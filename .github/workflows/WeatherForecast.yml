@@ -119,7 +119,7 @@ jobs:
     steps:
 
       - uses: actions/checkout@v3
-  
+
       - name: Setup GCP Service Account
         uses: google-github-actions/setup-gcloud@main
         with:
