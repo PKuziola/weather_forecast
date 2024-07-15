@@ -64,10 +64,6 @@ jobs:
           CLOUDSDK_METRICS_ENVIRONMENT: github-actions-setup-gcloud
           CLOUDSDK_METRICS_ENVIRONMENT_VERSION: 2.1.0
 
-      - name: Enable Cloud Run API
-        run: |
-          gcloud services enable run.googleapis.com
-
       - name: Deploy Google Cloud Functions
         run: |
           gcloud functions deploy generate_weather_summary \
