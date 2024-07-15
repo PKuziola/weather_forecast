@@ -13,9 +13,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Print current directory
-      run: pwd
-
     - name: Set up Python 3.11
       uses: actions/setup-python@v2
       with:
@@ -24,10 +21,6 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
-    - name: Check Git version
-      run: git --version
 
     - name: Cache pre-commit hooks
       uses: actions/cache@v2
@@ -41,7 +34,7 @@ jobs:
     - name: Run pre-commit with debug
       run: pre-commit run --all-files
 
-  create-pubsub-topic_new:
+  deploy-cloud-function:
     runs-on: ubuntu-latest
     steps:
 
@@ -71,35 +64,9 @@ jobs:
           CLOUDSDK_METRICS_ENVIRONMENT: github-actions-setup-gcloud
           CLOUDSDK_METRICS_ENVIRONMENT_VERSION: 2.1.0
 
-  deploy-gloud-functions_new:
-    runs-on: ubuntu-latest
-    steps:
-
-      - uses: actions/checkout@v3
-
-      - name: Setup GCP Service Account
-        uses: google-github-actions/setup-gcloud@main
-        with:
-          project_id: "cicdtest-421422"
-          service_account_key: ${{ secrets.GCP_ACCOUNT_KEY }}
-
-      - name: Authenticate GCP Account
-        uses: 'google-github-actions/auth@v2'
-        with:
-           credentials_json: ${{ secrets.GCP_ACCOUNT_KEY }}
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
       - name: Enable Cloud Run API
         run: |
           gcloud services enable run.googleapis.com
-
 
       - name: Deploy Google Cloud Functions
         run: |
@@ -111,25 +78,6 @@ jobs:
             --trigger-topic weather-topic \
             --memory=512MB \
             --set-env-vars "API_KEY=${{ secrets.API_KEY }},SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}"
-
-  create-scheduler-job:
-    runs-on: ubuntu-latest
-    container:
-      image: google/cloud-sdk
-    steps:
-
-      - uses: actions/checkout@v3
-
-      - name: Setup GCP Service Account
-        uses: google-github-actions/setup-gcloud@main
-        with:
-          project_id: "cicdtest-421422"
-          service_account_key: ${{ secrets.GCP_ACCOUNT_KEY }}
-
-      - name: Authenticate GCP Account
-        uses: 'google-github-actions/auth@v2'
-        with:
-           credentials_json: ${{ secrets.GCP_ACCOUNT_KEY }}
 
       - name: Create Scheduler Job
         run: |
